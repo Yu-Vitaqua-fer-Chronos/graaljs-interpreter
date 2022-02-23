@@ -18,8 +18,18 @@ repositories {
 }
 
 dependencies {
-  // This dependency is used by the application.
-  implementation 'org.graalvm.js:js:22.0.0.2'
+  // Graal dependencies
+  implementation "org.graalvm.js:js:${graalVersion}"
+  implementation "org.graalvm.sdk:graal-sdk:${graalVersion}"
+  implementation "org.graalvm.truffle:truffle-api:${graalVersion}"
+}
+
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'com.foc.graaljsenv.Main'
+    )
+  }
 }
 
 shadowJar {
