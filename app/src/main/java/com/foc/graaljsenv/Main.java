@@ -34,6 +34,12 @@ public class Main {
          .allowHostAccess(HostAccess.ALL)
          .allowHostClassLookup(className -> true)
          .engine(engine)
+         .allowAllAccess(true)
+         .allowExperimentalOptions(true)
+         .option("js.nashorn-compat", "true")
+         .option("js.commonjs-require", "true")
+         .option("js.commonjs-require-cwd", System.getProperty("user.dir"))
+         .option("js.ecmascript-version", "2022")
          .build();
         context.eval("js", code);
     }
