@@ -34,4 +34,5 @@ jar {
 
 shadowJar {
   archiveBaseName.set('graaljs-interpreter')
+  mergeServiceFiles()
 }
