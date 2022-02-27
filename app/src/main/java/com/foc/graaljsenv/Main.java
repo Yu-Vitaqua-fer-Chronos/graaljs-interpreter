@@ -3,12 +3,14 @@
  */
 package com.foc.graaljsenv;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.io.IOException;
 
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.HostAccess;
 
 public class Main {
@@ -18,29 +20,31 @@ public class Main {
             return;
         }
 
-        String code;
+        Source source;
         try {
-            code = Files.readString(Paths.get(args[0]));
+            File file = Paths.get(args[0]).toFile();
+            String lang = Source.findLanguage(file);
+            source = Source.newBuilder(lang, file).build();
+
+            Engine engine = Engine.newBuilder()
+              .option("engine.WarnInterpreterOnly", "false")
+              .build();
+
+            Context context = Context.newBuilder("js")
+             .allowHostAccess(HostAccess.ALL)
+             .allowHostClassLookup(className -> true)
+             .engine(engine)
+             .allowAllAccess(true)
+             .allowExperimentalOptions(true)
+             .option("js.nashorn-compat", "true")
+             .option("js.commonjs-require", "true")
+             .option("js.commonjs-require-cwd", System.getProperty("user.dir"))
+             .option("js.ecmascript-version", "2022")
+             .build();
+            // context.eval("js", code);
+            context.eval(source);
         } catch (IOException e) {
-            System.out.println("Can't find the specified file!");
-            return;
+            e.printStackTrace();
         }
-
-        Engine engine = Engine.newBuilder()
-          .option("engine.WarnInterpreterOnly", "false")
-          .build();
-
-        Context context = Context.newBuilder("js")
-         .allowHostAccess(HostAccess.ALL)
-         .allowHostClassLookup(className -> true)
-         .engine(engine)
-         .allowAllAccess(true)
-         .allowExperimentalOptions(true)
-         .option("js.nashorn-compat", "true")
-         .option("js.commonjs-require", "true")
-         .option("js.commonjs-require-cwd", System.getProperty("user.dir"))
-         .option("js.ecmascript-version", "2022")
-         .build();
-        context.eval("js", code);
     }
 }
