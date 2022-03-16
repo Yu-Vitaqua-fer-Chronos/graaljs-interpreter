@@ -15,9 +15,9 @@ import org.graalvm.polyglot.HostAccess;
 
 public class Main {
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Can only accept one argument!");
-            return;
+        if (args.length < 1) {
+            System.out.println("Needs a minimum of 1 argument!");
+            System.exit(1);
         }
 
         Source source;
