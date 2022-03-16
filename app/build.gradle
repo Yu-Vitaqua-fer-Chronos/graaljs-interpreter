@@ -24,6 +24,11 @@ dependencies {
   implementation "org.graalvm.truffle:truffle-api:${graalVersion}"
 }
 
+def javaVersion = 17
+
+sourceCompatibility = JavaLanguageVersion.of(javaVersion)
+targetCompatibility= JavaLanguageVersion.of(javaVersion)
+
 jar {
   manifest {
     attributes(
@@ -33,6 +38,6 @@ jar {
 }
 
 shadowJar {
-  archiveBaseName.set('graaljs-interpreter')
+  archiveBaseName.set('graaljs-interpreter-java'+javaVersion)
   mergeServiceFiles()
 }
